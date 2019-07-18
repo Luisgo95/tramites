@@ -79,7 +79,6 @@ exports.reinicio = (req, res, next) => {
     }).catch(err => {
         SpanishError.resolver(err, res);
     });
-
 };
 
 exports.user_login = (req, res, next) => {
@@ -93,7 +92,8 @@ exports.user_login = (req, res, next) => {
                         message: "Auth failed"
                     });
                 }
-                if (result) {
+                if (result && !user.Logueado) {
+                    console.log(user.Logueado);
                     const token = jwt.sign({
                             email: user.Email,
                             userId: user.id,
@@ -101,13 +101,17 @@ exports.user_login = (req, res, next) => {
                         },
                         process.env.JWT_KEY, { expiresIn: process.env.TTEXPIRA + "h" });
                     insetatoken(token, user.id);
+                    Usuario.update({ Logueado: true }, { where: { Email: req.body.Email } });
                     return res.status(200).json({
-                        Nombre: user.Nombre,
-                        id: user.id,
                         message: "Auth successful",
                         token: token
-                        
                     });
+                } else {
+                    if (result && user.Logueado) {
+                        return res.status(200).json({
+                            message: "Usuario ya logueado con anterioridad"
+                        });
+                    }
                 }
                 res.status(401).json({
                     message: "Auth failed"
@@ -116,6 +120,20 @@ exports.user_login = (req, res, next) => {
         } else {
             res.status(404).json({ message: 'Auth failed' });
         }
+    }).catch(err => {
+        SpanishError.resolver(err, res);
+    });
+};
+
+exports.user_logout = (req, res, next) => {
+    Usuario.findOne({
+        where: { Email: req.body.Email }
+    }).then(user => {
+        Usuario.update({ Logueado: false }, { where: { Email: req.body.Email } }).then(response => {
+            res.status(200).json({ Mensaje: 'Sesión Cerrada' });
+        }).catch(err => {
+            SpanishError.resolver(err, res);
+        });
     }).catch(err => {
         SpanishError.resolver(err, res);
     });

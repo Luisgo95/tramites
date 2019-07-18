@@ -1,0 +1,16 @@
+        
+        
+        {
+        	
+            "nombre":"nombre",
+            "clave":"clave",
+            "estado":"estado",
+            "cambio_obligado":"true",
+            "emp_empleado":"1",
+            "logueado":"true",
+            "fecha_entra":"01/01/1995",
+            "fecha_sale":"01/01/1995",
+            "reintentos":"2",
+            "fechacambioclave":"01/01/1995"
+            
+            }

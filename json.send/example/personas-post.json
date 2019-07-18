@@ -1,0 +1,19 @@
+{    
+
+    "Nombre": "Carlos",
+    "Apellido":"Lopez" ,
+    "Ape_Casada": "gonzales",
+    "Nacimiento": "10/10/2019",
+    "Sexo": "M",
+    "Estado_Civil":"Casado",
+    "Nacionalidad": 1,
+    "Tipo_Persona": 1,
+    "Prf_Profesion": 1,
+    "Fecha_Ingreso": "10/10/2019",
+    "Nombre_Completo": "Carlos Lopez Gonzales",
+    "Primer_Nombre": "Carlos1",
+    "Segundo_Nombre":"Carlos 2",
+    "Tercer_Nombre":"Carlos 3" ,
+    "Primer_Apellido": "Mateo",
+    "Segundo_Apellido": "Lopez"
+    }

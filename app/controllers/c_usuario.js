@@ -103,6 +103,8 @@ exports.user_login = (req, res, next) => {
                     insetatoken(token, user.id);
                     Usuario.update({ Logueado: true }, { where: { Email: req.body.Email } });
                     return res.status(200).json({
+                        Nombre: user.Nombre,
+                        id: user.id,
                         message: "Auth successful",
                         token: token
                     });
@@ -130,7 +132,7 @@ exports.user_logout = (req, res, next) => {
         where: { Email: req.body.Email }
     }).then(user => {
         Usuario.update({ Logueado: false }, { where: { Email: req.body.Email } }).then(response => {
-            res.status(200).json({ Mensaje: 'Sesión Cerrada' });
+            res.status(200).json({ Codigo: 200, Mensaje: 'Sesión Cerrada' });
         }).catch(err => {
             SpanishError.resolver(err, res);
         });

@@ -38,6 +38,14 @@ exports.update = (req, res) => {
     });
 };
 
+exports.BusquedaWicho = (req, res) => {
+    db.sequelize.query(' select * from personas').then(response => {
+        res.status(200).json(response);
+    }).catch(err => {
+        SpanishError.resolver(err, res);
+    });
+};
+
 exports.delete = (req, res) => {
     const id = req.params.Id;
     Persona.destroy({

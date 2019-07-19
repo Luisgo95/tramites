@@ -103,6 +103,7 @@ exports.user_login = (req, res, next) => {
                     insetatoken(token, user.id);
                     Usuario.update({ Logueado: true }, { where: { Email: req.body.Email } });
                     return res.status(200).json({
+                        email: user.Email,
                         Nombre: user.Nombre,
                         id: user.id,
                         message: "Auth successful",

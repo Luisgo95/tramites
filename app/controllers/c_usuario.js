@@ -106,7 +106,9 @@ exports.user_login = (req, res, next) => {
                         email: user.Email,
                         Nombre: user.Nombre,
                         id: user.id,
+                        idEmpresa: user.EmpresaId,
                         message: "Auth successful",
+                       
                         token: token
                     });
                 } else {

@@ -3,11 +3,11 @@ const router = express.Router();
 const checkAuth = require('../middleware/check-out');
 const abc = require('../controllers/c_empresa');
 
-router.get('/', abc.findAll)
-    .post('/', abc.create);
+router.get('/', checkAuth,abc.findAll)
+    .post('/', checkAuth,abc.create);
 
-router.get('/:Id', abc.findById)
-    .delete('/:Id', abc.delete)
-    .put('/:Id', abc.update);
+router.get('/:Id', checkAuth,abc.findById)
+    .delete('/:Id',checkAuth, abc.delete)
+    .put('/:Id', checkAuth,abc.update);
 
 module.exports = router;

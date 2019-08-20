@@ -5,6 +5,9 @@ module.exports = (sequelize, Sequelize) => {
             autoIncrement: true,
             primaryKey: true
         },
+        NoRecibo: {
+            type: Sequelize.INTEGER,
+        },
         Cantidad: {
             type: Sequelize.DOUBLE,
             allowNull: false

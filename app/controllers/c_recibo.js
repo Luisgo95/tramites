@@ -1,7 +1,7 @@
 const db = require('../config/db.config.js');
 const SpanishError = require('./c_spanish_error');
 const Recibo = db.Recibo;
-
+const sequelize = db.sequelize;
 exports.create = (req, res) => {
     Recibo.create(req.body)
         .then(Response => {
@@ -47,4 +47,19 @@ exports.delete = (req, res) => {
     }).catch(err => {
         SpanishError.resolver(err, res);
     });
+};
+exports.InRecibo = (req, res) => {
+    sequelize.query('call InRecibos(:Cantidad,:IdGestion,:UsuarioId,:EmpresaId);',
+  { 
+    replacements: { Cantidad: req.body.Cantidad,
+    IdGestion:req.body.IdGestion,
+    UsuarioId:req.body.UsuarioId,
+    EmpresaId :req.body.EmpresaId},type: sequelize.QueryTypes.fieldMap}
+).then(Response => {
+  console.log(Response)
+  res.status(200).json(Response);
+
+}).catch(err => {
+    res.json(err);
+});
 };

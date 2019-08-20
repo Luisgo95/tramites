@@ -36,8 +36,10 @@ db.Gestion.hasMany(db.Tramite, { foreignKey: { allowNull: false }, onDelete: 'RE
 db.Tramite.belongsTo(db.Gestion);
 db.Lugar.hasMany(db.Traslado, { foreignKey: { name: 'LugarOrigenId', allowNull: false, }, onDelete: 'RESTRICT' });
 db.Traslado.belongsTo(db.Lugar, { foreignKey: { name: 'LugarOrigenId', allowNull: false } });
+
 db.Lugar.hasMany(db.Traslado, { foreignKey: { name: 'LugarDestinoId', allowNull: false, }, onDelete: 'RESTRICT' });
 db.Traslado.belongsTo(db.Lugar, { foreignKey: { name: 'LugarDestinoId', allowNull: false } });
+
 db.Persona.hasMany(db.Gestion, { foreignKey: { allowNull: false }, onDelete: 'RESTRICT' });
 db.Gestion.belongsTo(db.Persona);
 db.Gestion.hasMany(db.Recibo, { foreignKey: { allowNull: false }, onDelete: 'RESTRICT' });
@@ -45,12 +47,19 @@ db.Recibo.belongsTo(db.Gestion);
 db.Usuario.hasMany(db.Gestion, { foreignKey: { allowNull: false }, onDelete: 'RESTRICT' });
 db.Gestion.belongsTo(db.Usuario);
 db.Usuario.hasMany(db.Recibo, { foreignKey: { allowNull: false }, onDelete: 'RESTRICT' });
+
 db.Recibo.belongsTo(db.Usuario);
+
 db.Empresa.hasMany(db.Usuario, { foreignKey: { allowNull: false }, onDelete: 'RESTRICT' });
+
 db.Usuario.belongsTo(db.Empresa);
+
 db.Usuario.hasMany(db.Egreso, { foreignKey: { allowNull: false }, onDelete: 'RESTRICT' });
+
 db.Egreso.belongsTo(db.Usuario);
+
 db.Usuario.hasMany(db.Deposito, { foreignKey: { allowNull: false }, onDelete: 'RESTRICT' });
+
 db.Deposito.belongsTo(db.Usuario);
 
 

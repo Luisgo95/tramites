@@ -44,6 +44,7 @@ app.use('/lugares', RouteLugar);
 app.use('/tipos-tramites', RouteTipoTramite);
 app.use('/traslados', RouteTraslado);
 app.use('/tramites', RouteTramite);
+
 app.use('/recibos', RouteRecibo);
 app.use('/temporal', RouteTemporal);
 app.use('/empresas', RouteEmpresa);

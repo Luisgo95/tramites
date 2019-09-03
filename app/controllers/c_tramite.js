@@ -32,23 +32,26 @@ exports.findById = (req, res) => {
 };
 
 exports.findGestion = (req, res) => {
-    Tramite.findAll({
+    Tramite.findAndCountAll({
         include:[{
             model:TipoTramite,
             Required: true
         }],
         where: { GestionId: req.params.Id }
     }).then(response => {
-        /**const resp = {
+        const resp = {
             rows: response.rows.map(doc => {
                 return { 
-                      id: doc.id,
+                     id: doc.id,
+                     NombreTramite: doc.Tipos_Tramite.Nombre,
+                    Precio: doc.Tipos_Tramite.Precio,
+                     Costo: doc.Costo,
                      Detalle: doc.DetalleTramite,
-                     NombreTramite: doc.Tipos_Tramite.Nombre
+                     GestionId: doc.GestionId
                     };
             })
-        };*/
-        res.status(200).json(response);
+        };
+        res.status(200).json(resp);
     }).catch(err => {
        // res.status(200).json(err);
         SpanishError.resolver(err, res);

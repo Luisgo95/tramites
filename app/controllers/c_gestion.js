@@ -1,6 +1,7 @@
 const db = require('../config/db.config.js');
 const SpanishError = require('./c_spanish_error');
 const Gestion = db.Gestion;
+const persona = db.Persona;
 
 exports.create = (req, res) => {
     Gestion.create(req.body)
@@ -13,8 +14,29 @@ exports.create = (req, res) => {
 };
 
 exports.findAll = (req, res) => {
-    Gestion.findAll().then(response => {
-        res.status(200).json(response);
+    Gestion.findAndCountAll({
+        // const idPersona : Gestion.PersonaId;
+        include:[{
+            model: persona,
+            Required:true
+            }]//,
+          //  where:{ id : idPersona}
+    }).then(response => {
+        const resp = {
+            rows: response.rows.map(doc => {
+                return { 
+                     id: doc.id,
+                     Anticipo: doc.Anticipo,
+                     Total: doc.Total,
+                     Estado: doc.Estado,
+                    PersonaId: doc.Persona.id,
+                     Nombres: doc.Persona.Nombres,
+                     Apellidos: doc.Persona.Apellidos
+                     //GestionId: doc.GestionId
+                    };
+            })
+        };
+        res.status(200).json(resp);
     }).catch(err => {
         SpanishError.resolver(err, res);
     });

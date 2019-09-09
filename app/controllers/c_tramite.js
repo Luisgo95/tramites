@@ -44,7 +44,7 @@ exports.findGestion = (req, res) => {
                 return { 
                      id: doc.id,
                      NombreTramite: doc.Tipos_Tramite.Nombre,
-                    Precio: doc.Tipos_Tramite.Precio,
+                     Precio: doc.Tipos_Tramite.Precio,
                      Costo: doc.Costo,
                      Detalle: doc.DetalleTramite,
                      GestionId: doc.GestionId

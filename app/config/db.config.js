@@ -4,8 +4,21 @@ const sequelize = new Sequelize(
     process.env.user,
     process.env.clave, {
         host: process.env.host,
-        dialect: 'mysql'
-    });
+        dialect: 'mysql',
+        dialectOptions: {
+            useUTC: false, //for reading from database
+            dateStrings: true,
+            typeCast: function (field, next) { // for reading from database
+              if (field.type === 'DATETIME') {
+                return field.string()
+              }
+                return next()
+              },
+          },
+        timezone: 'America/Guatemala'
+         
+    }
+    );
 const db = {};
 db.Op = Sequelize.Op;
 

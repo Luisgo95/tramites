@@ -1,6 +1,8 @@
 const db = require('../config/db.config.js');
 const SpanishError = require('./c_spanish_error');
 const Egreso = db.Egreso;
+const sequelize = db.sequelize;
+const Op = db.Op;
 
 exports.create = (req, res) => {
     Egreso.create(req.body)
@@ -12,6 +14,7 @@ exports.create = (req, res) => {
 
 };
 
+
 exports.findAll = (req, res) => {
     Egreso.findAll().then(response => {
         res.status(200).json(response);
@@ -21,7 +24,20 @@ exports.findAll = (req, res) => {
 
 };
 
-
+exports.ConsultaEgresos = (req, res) => {
+    sequelize.query('call ListarEgresos(:Inicio,:Fin);',
+    {
+        replacements: {
+            Inicio: req.params.Inicio,
+            Fin: req.params.Fin,
+        }, type: sequelize.QueryTypes.fieldMap
+    })
+    .then(response => {       
+        res.status(200).json(response);
+    }).catch(err => {
+        SpanishError.resolver(err, res);
+    });
+};
 exports.findById = (req, res) => {
     Egreso.findByPk(req.params.Id).then(response => {
         res.status(200).json(response);

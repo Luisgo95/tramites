@@ -4,7 +4,7 @@ const Recibo = db.Recibo;
 const Gestion = db.Gestion;
 const persona = db.Persona;
 const sequelize = db.sequelize;
-
+const Op = db.Op;
 exports.create = (req, res) => {
     Recibo.create(req.body)
         .then(Response => {
@@ -41,7 +41,7 @@ exports.findAll = (req, res) => {
                 model: persona,
                 Required: true
             }]
-        }], where: { id: 9001 }
+        }]//, where: { id: 9001 }
     }).then(response => {
         const resp = {
             rows: response.rows.map(doc => {
@@ -63,10 +63,60 @@ exports.findAll = (req, res) => {
     });
 };
 
+/**exports.ConsultaIngresos = (req, res) => {
+    Recibo.findAndCountAll({
+        include: [{
+            model: Gestion,
+            Required: true,
+            include: [{
+                model: persona,
+                Required: true
+            }]
+        }], where: {
+            createdAt: {
+                [Op.between]: [req.params.Inicio, req.params.Fin],
+            }
+        }
+  
+        
+    }).then(response => {
+        const resp = {
+            rows: response.rows.map(doc => {
+                return {
+                    NoRecibo: doc.NoRecibo,
+                    Cantidad: doc.Cantidad,
+                    CodGestion: doc.GestionId,
+                    TotalGestion: doc.Gestion.Total,
+                    Acumulado: doc.Gestion.Anticipo,
+                    Nombre: doc.Gestion.Persona.Nombres,
+                    Apellidos: doc.Gestion.Persona.Apellidos,
+                    Nit: doc.Gestion.Persona.Nit,
+                    Fecha: doc.createdAt
+                };
+            })
+        };
+        console.log(req.params.Inicio+" "+req.params.Fin);
+        res.status(200).json(resp);
+    }).catch(err => {
+        SpanishError.resolver(err, res);
+    });
+};
 
-
-
-
+*/
+exports.ConsultaIngresos = (req, res) => {
+    sequelize.query('call ListarRecibos(:Inicio,:Fin);',
+    {
+        replacements: {
+            Inicio: req.params.Inicio,
+            Fin: req.params.Fin,
+        }, type: sequelize.QueryTypes.fieldMap
+    })
+    .then(response => {       
+        res.status(200).json(response);
+    }).catch(err => {
+        SpanishError.resolver(err, res);
+    });
+};
 
 
 
@@ -122,9 +172,40 @@ exports.InRecibo = (req, res) => {
         if (req.body.NuevoSaldo == 0) {
             Gestion.update({ Estado: "Inactivo" }, { where: { id: req.body.IdGestion } });
         }
-        //console.log(Responcse)
-        res.status(200).json(Response);
-
+        var Codigo = Response[0];
+        Recibo.findAndCountAll({
+            include: [{
+                model: Gestion,
+                Required: true,
+                include: [{
+                    model: persona,
+                    Required: true
+                }]
+                //Agregar el id de la respuesta
+            }], where: { id: Codigo.id }
+        }).then(response => {
+            const resp = {
+                rows: response.rows.map(doc => {
+                    return {
+                        NoRecibo: doc.NoRecibo,
+                        Cantidad: doc.Cantidad,
+                        CodGestion: doc.GestionId,
+                        TotalGestion: doc.Gestion.Total,
+                        Acumulado: doc.Gestion.Anticipo,
+                        Nombre: doc.Gestion.Persona.Nombres + " " + doc.Gestion.Persona.Apellidos,
+                        Fecha: doc.createdAt,
+                        // Apellidos: ,
+                        Nit: doc.Gestion.Persona.Nit
+                    };
+                })
+            };
+            res.status(200).json(resp);
+        }).catch(err => {
+            SpanishError.resolver(err, res);
+        });
+        //var Codigo = Response[0];
+        //console.log(Codigo.id);
+        //res.status(200).json(Response[0]);
     }).catch(err => {
         res.json(err);
     });

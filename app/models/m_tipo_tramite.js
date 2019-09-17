@@ -11,6 +11,9 @@ module.exports = (sequelize, Sequelize) => {
         Precio: {
             type: Sequelize.DOUBLE
         },
+        EmpresaId: {
+            type: Sequelize.INTEGER
+        },
         Estado: {
             type: Sequelize.ENUM,
             allowNull: false,

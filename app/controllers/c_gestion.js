@@ -2,6 +2,7 @@ const db = require('../config/db.config.js');
 const SpanishError = require('./c_spanish_error');
 const Gestion = db.Gestion;
 const persona = db.Persona;
+const usu = db.Usuario;
 
 exports.create = (req, res) => {
     Gestion.create(req.body)
@@ -16,22 +17,32 @@ exports.create = (req, res) => {
 exports.findAll = (req, res) => {
     Gestion.findAndCountAll({
         // const idPersona : Gestion.PersonaId;
-        include:[{
-            model: persona,
-            Required:true
-            }]//,
+
+            include:[{
+                model: persona,
+                Required: false
+            },       
+             {
+                model: usu,
+               
+                Required:true,
+              
+                }],
+           //,
           //  where:{ id : idPersona}
     }).then(response => {
-        const resp = {
-            rows: response.rows.map(doc => {
+    const resp = {
+       rows: response.rows.map(doc => {
                 return { 
                      id: doc.id,
                      Anticipo: doc.Anticipo,
                      Total: doc.Total,
                      Estado: doc.Estado,
-                    PersonaId: doc.Persona.id,
+                     PersonaId: doc.Persona.id,
                      Nombres: doc.Persona.Nombres,
-                     Apellidos: doc.Persona.Apellidos
+                     Apellidos: doc.Persona.Apellidos,
+                     Usuario: doc.UsuarioId,
+                    Empresa: doc.Usuario.EmpresaId
                      //GestionId: doc.GestionId
                     };
             })

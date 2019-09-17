@@ -7,6 +7,7 @@ router.get('/', checkAuth,abc.findAll)
     .post('/',checkAuth, abc.create);
 
 router.get('/:Id',checkAuth, abc.findById)
+    .get('/:Inicio?/:Fin?',checkAuth, abc.ConsultaEgresos)
     .delete('/:Id',checkAuth, abc.delete)
     .put('/:Id', checkAuth,abc.update);
 

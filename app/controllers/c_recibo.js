@@ -3,6 +3,7 @@ const SpanishError = require('./c_spanish_error');
 const Recibo = db.Recibo;
 const Gestion = db.Gestion;
 const persona = db.Persona;
+const usuario = db.Usuario;
 const sequelize = db.sequelize;
 const Op = db.Op;
 exports.create = (req, res) => {
@@ -105,17 +106,17 @@ exports.findAll = (req, res) => {
 */
 exports.ConsultaIngresos = (req, res) => {
     sequelize.query('call ListarRecibos(:Inicio,:Fin);',
-    {
-        replacements: {
-            Inicio: req.params.Inicio,
-            Fin: req.params.Fin,
-        }, type: sequelize.QueryTypes.fieldMap
-    })
-    .then(response => {       
-        res.status(200).json(response);
-    }).catch(err => {
-        SpanishError.resolver(err, res);
-    });
+        {
+            replacements: {
+                Inicio: req.params.Inicio,
+                Fin: req.params.Fin,
+            }, type: sequelize.QueryTypes.fieldMap
+        })
+        .then(response => {
+            res.status(200).json(response);
+        }).catch(err => {
+            SpanishError.resolver(err, res);
+        });
 };
 
 
@@ -130,19 +131,60 @@ exports.ConsultaIngresos = (req, res) => {
 
 
 exports.findById = (req, res) => {
-    Recibo.findByPk(req.params.Id).then(response => {
-        res.status(200).json(response);
+    Recibo.findAndCountAll({
+        include: [{
+            model: usuario,
+            Required: true,
+        }, {
+            model: Gestion,
+            Required: true,
+            include: [{
+                model: persona,
+                Required: true
+            }]
+        }
+        ], where: { GestionId: req.params.Id }
+    }).then(response => {
+        const resp = {
+            rows: response.rows.map(doc => {
+                return {
+                    id: doc.id,
+                    NoRecibo: doc.NoRecibo,
+                    Cantidad: doc.Cantidad,
+                    Estado: doc.Estado,
+                    createdAt: doc.createdAt,
+                    GestionId: doc.GestionId,
+                    clienteN: doc.Gestion.Persona.Nombres,
+                    clienteP: doc.Gestion.Persona.Apellidos,
+                    Nit: doc.Gestion.Persona.Nit,
+                    Usuario: doc.Usuario.Nombre,
+                    Empresa: doc.Usuario.EmpresaId
+                };
+            })
+        };
+
+        res.status(200).json(resp);
     }).catch(err => {
         SpanishError.resolver(err, res);
     });
 };
 
-exports.update = (req, res) => {
-    Recibo.update(req.body, { where: { id: req.params.Id } }).then(response => {
-        res.status(200).json(response);
-    }).catch(err => {
-        SpanishError.resolver(err, res);
-    });
+exports.Anulado = (req, res) => {
+
+    Recibo.update({ Cantidad: 0 },
+        //Comparo el id del recibo con el id del front
+        { where: { id: req.body.Id } }).then(response => {
+                    sequelize.query('call VerificarEstado(:IdGestion);',
+                        {
+                            replacements: {
+                                IdGestion: req.body.GestionId
+                            }, type: sequelize.QueryTypes.fieldMap
+                        })
+                }).then(Validar => {
+                    res.status(200).json(Validar);
+                }).catch(err => {
+                    res.status(500).json(err);
+                });  
 };
 
 exports.delete = (req, res) => {

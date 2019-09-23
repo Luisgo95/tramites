@@ -108,6 +108,7 @@ exports.user_login = (req, res, next) => {
                         id: user.id,
                         idEmpresa: user.EmpresaId,
                         message: "Auth successful",
+                        Rol:user.Rol,
                        
                         token: token
                     });

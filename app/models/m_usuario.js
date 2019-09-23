@@ -19,6 +19,10 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.STRING,
             allowNull: false
         },
+        Rol: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
         Estado: {
             type: Sequelize.ENUM,
             values: [

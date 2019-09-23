@@ -9,6 +9,6 @@ router.get('/', checkAuth,abc.findAll)
 router.get('/:Id',checkAuth, abc.findById)
     .get('/:Inicio?/:Fin?',checkAuth, abc.ConsultaIngresos)
     .delete('/:Id',checkAuth, abc.delete)
-    .put('/:Id',checkAuth, abc.update);
+    .put('/',checkAuth, abc.Anulado);
 
 module.exports = router;

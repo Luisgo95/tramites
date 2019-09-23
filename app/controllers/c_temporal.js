@@ -1,6 +1,7 @@
 const db = require('../config/db.config.js');
 const SpanishError = require('./c_spanish_error');
 const Temporal = db.Temporal;
+const TiposTramites = db.TipoTramite;
 
 
 exports.create = (req, res) => {
@@ -65,7 +66,13 @@ exports.TotalGestion = (req, res) => Temporal.findAll({
 });
 
 exports.porUsuario = (req, res) => {
-    Temporal.findAll({ where: { Idusuario: req.params.Id } }).then(response => {
+    Temporal.findAll({
+      //  include:[{
+        //    model:TiposTramites,
+          //  Required: true
+       // }]//,        
+        where: { Idusuario: req.params.Id } 
+    }).then(response => {
         res.status(200).json(response);
     }).catch(err => {
         SpanishError.resolver(err, res);

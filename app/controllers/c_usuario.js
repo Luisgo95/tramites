@@ -164,7 +164,7 @@ exports.user_signup = (req, res) => {
         .then(Response => {
             res.status(200).json(Response);
         }).catch(err => {
-            SpanishError.resolver(err, res);
+            res.json(err);
         });
 };
 

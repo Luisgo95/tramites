@@ -203,7 +203,7 @@ exports.create = (req, res) => {
 
 
 exports.findAll = (req, res) => {
-    Usuario.findAndCountAll().then(response => {
+    Usuario.findAll().then(response => {
         res.status(200).json(response);
     }).catch(err => {
         SpanishError.resolver(err, res);

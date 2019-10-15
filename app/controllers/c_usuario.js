@@ -204,6 +204,10 @@ exports.create = (req, res) => {
 
 exports.findAll = (req, res) => {
     Usuario.findAll().then(response => {
+<<<<<<< HEAD
+=======
+        
+>>>>>>> 04e0eff5daf3fe6f2815561918ce012b39450c75
         res.status(200).json(response);
     }).catch(err => {
         SpanishError.resolver(err, res);

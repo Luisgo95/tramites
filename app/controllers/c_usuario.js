@@ -85,6 +85,7 @@ exports.user_login = (req, res, next) => {
     Usuario.findOne({
         where: { Email: req.body.Email }
     }).then(user => {
+        console.log(user);
         if (user) {
             bcrypt.compare(req.body.Clave, user.Clave, (err, result) => {
                 if (err) {
@@ -204,10 +205,6 @@ exports.create = (req, res) => {
 
 exports.findAll = (req, res) => {
     Usuario.findAll().then(response => {
-<<<<<<< HEAD
-=======
-        
->>>>>>> 04e0eff5daf3fe6f2815561918ce012b39450c75
         res.status(200).json(response);
     }).catch(err => {
         SpanishError.resolver(err, res);

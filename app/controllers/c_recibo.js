@@ -156,6 +156,7 @@ exports.findById = (req, res) => {
                     GestionId: doc.GestionId,
                     clienteN: doc.Gestion.Persona.Nombres,
                     clienteP: doc.Gestion.Persona.Apellidos,
+                    Telefono: doc.Gestion.Persona.Telefono,
                     Nit: doc.Gestion.Persona.Nit,
                     Usuario: doc.Usuario.Nombre,
                     Empresa: doc.Usuario.EmpresaId

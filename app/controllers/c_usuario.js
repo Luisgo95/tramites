@@ -93,8 +93,8 @@ exports.user_login = (req, res, next) => {
                         message: "Auth failed"
                     });
                 }
-                if (result && !user.Logueado) {
-                    console.log(user.Logueado);
+                if (result) {
+               
                     const token = jwt.sign({
                             email: user.Email,
                             userId: user.id,
